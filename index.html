@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+<body onload="initialize()">
+<div class="main-form">
+    <div class="main-form-source">
+        <div>
+            <label for="input">Input: </label>
+        </div>
+        <div>
+                <textarea id="input" type="text" rows="25" cols="70"
+                          placeholder="Enter formatted input here"></textarea>
+        </div>
+    </div>
+    <div class="main-form-source">
+        <div>
+            <label for="output">Output: </label>
+        </div>
+        <textarea id="output" type="text" rows="25" cols="70"
+                  placeholder="Code will be generated here"></textarea>
+    </div>
+    <div class="main-form-control">
+        <button id="gen">Generate</button>
+    </div>
+    <div class="main-form-instruct">Supported input:
+        <ul>
+            <li>Scanning normal variables: <code>var</code></li>
+            <li>Scanning variables in a loop: <code>n: a b</code></li>
+            <li>Scanning in nested loops: <code>n: v m: u c</code></li>
+            <li>Multiple test-cases: <code>t^</code></li>
+        </ul>
+        Note: Don't take this very seriously, this was done in like an hour or two.
+    </div>
+</div>
+</body>
+</html>
