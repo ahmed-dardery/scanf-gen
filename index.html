@@ -1,42 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Input</title>
-    <link type="text/css" rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
-</head>
-<body onload="initialize()">
-<div class="main-form">
-    <div class="main-form-source">
+  </head>
+  <body onload="initialize()">
+    <div class="main-form row justify-content-md-center">
+      <div class="input col-12 col-lg-4">
         <div>
-            <label for="input">Input: </label>
+          <h3><span class="badge badge-primary d-block mt-3">Input</span></h3>
         </div>
         <div>
-                <textarea id="input" type="text" rows="25" cols="70"
-                          placeholder="Enter formatted input here"></textarea>
+          <textarea
+            id="input"
+            class="form-control"
+            type="text"
+            placeholder="Enter formatted input here"
+          ></textarea>
         </div>
-    </div>
-    <div class="main-form-source">
+        <button id="gen" class="btn btn-success d-block w-100 mt-1">Generate</button>
+      </div>
+      
+      <div class="output col-12 col-lg-4">
         <div>
-            <label for="output">Output: </label>
+          <h3><span class="badge badge-primary d-block mt-3">Output</span></h3>
         </div>
-        <textarea id="output" type="text" rows="25" cols="70"
-                  placeholder="Code will be generated here"></textarea>
+        <textarea
+          id="output"
+          class="form-control"
+          type="text"
+          resize="no"
+          placeholder="Code will be generated here"
+          readonly
+        ></textarea>
+        <button id="copy" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Copied !" onclick="copy()" class="btn btn-secondary d-block w-100 mt-1">Copy</button>
+      </div>
     </div>
-    <div class="main-form-control">
-        <button id="gen">Generate</button>
-    </div>
-    <div class="main-form-instruct">Supported input:
+      
+    
+      
+    <!--The bottom side-->
+    <div class="main-form-instruct m-4">
+        <div class="alert alert-primary text-center" role="alert">
+            Supported input
+        </div>
         <ul>
             <li>Scanning normal variables: <code>var</code></li>
             <li>Scanning variables in a loop: <code>n: a b</code></li>
             <li>Scanning in nested loops: <code>n: v m: u c</code></li>
             <li>Multiple test-cases: <code>t^</code></li>
         </ul>
+        <div class="alert alert-danger text-center" role="alert">
+            Note: Don't take this very seriously, this was done in like an hour or
+        two.
+        </div>
         
-		Note: Don't take this very seriously, this was done in like an hour or two.
     </div>
-</div>
-</body>
+    
+
+
+
+    <!--IGNORE BOOTSTRAP CDNS-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
 </html>
