@@ -4,93 +4,117 @@ function initialize() {
 }
 
 function generateOutput() {
-    const generated = attemptToGenerate();
-    document.getElementById("output").innerHTML = generated;
+    document.getElementById("output").innerHTML = attemptToGenerate();
 }
 
 const letter = ['i', 'j', 'k', 'ii', 'jj'];
 const MAX_SCOPES = 5;
 
 function attemptToGenerate() {
+    //Write given data with respect to a particular scope
     const write = (scopes, append) => '    '.repeat(scopes) + append;
-    const scanf = (variables, indicies) => {
-        const accessor = indicies.map(v => `[${v}]`).join("");
+
+    //Generates a scanf statement that reads into corresponding arrays accessed by given indices.
+    const scanf = (variables, indices) => {
+        const accessor = indices.map(v => `[${v}]`).join("");
         let sb = [];
+
+        const formattedVariables = variables.filter(v => v.length > 0).map(v => {
+            const lastChar = v[v.length - 1];
+            if (lastChar === "'")
+                return `&${v.substring(0, v.length - 1)}`;
+            else
+                return `&${v}${accessor}`
+        });
+
         sb.push(
             "scanf(\"",
-            "%d".repeat(variables.length),
+            "%d".repeat(formattedVariables.length),
             "\", ",
-            variables.map(v => `&${v}${accessor}`).join(", "),
+            formattedVariables.join(", "),
             ");"
         );
 
         return sb.join("");
     };
+
+    //Generates a loop statement with given info.
     const loop = (i, n) => `for (int ${i} = 0; ${i} < ${n}; ++${i})`;
 
+    /*----------------------------------------------------------------------------------------*/
 
     const text = document.getElementById("input").value;
     const lines = text.split(/\n|\r\n/);
     let scopes = 0;
     let generatedLines = [];
-    let outsideScope = scopes;
+    let allVariables = [];
+
     lines.forEach(line => {
         const symb = line.split(' ');
         if (symb.length === 0) return;
-        let indicies = [];
+        let indices = [];
         let variables = [];
 
-        symb.forEach((symbol => {
-            const lastChar = symbol[symbol.length - 1];
-            let loopLimit = '';
-            switch (lastChar) {
-                case ':':
-                case '^': {
-                    if (variables.length > outsideScope) {
-                        generatedLines.push(write(scopes, scanf(variables, indicies)));
+        const printCurrentVariables = () => {
+            if (variables.length !== 0) {
+                generatedLines.push(write(scopes, scanf(variables, indices)));
+                allVariables = [...allVariables, ...variables];
+                variables = [];
+            }
+        };
 
-                        variables = [];
-                    }
-                    loopLimit = symbol.substring(0, symbol.length - 1);
+        let endlTerminators = 0;
+        symb.forEach((symbol => {
+            if (symbol === '}') {
+                if (scopes > 0) {
+                    printCurrentVariables();
+                    generatedLines.push(write(--scopes, "}"));
+                }
+                else
+                    generatedLines.push(write(scopes, "/* Unaccounted ^ was found */"));
+                return;
+            }
+            const lastChar = symbol[symbol.length - 1];
+
+            switch (lastChar) {
+                //loop control
+                case ':':
+                case '{': {
+                    printCurrentVariables();
+                    const loopLimit = symbol.substring(0, symbol.length - 1);
                     if (loopLimit.length === 0)
                         return "Expected loop variable, found null.";
+
+                    const iterator = lastChar === ':' ? letter[scopes] : loopLimit + loopLimit;
+
+                    generatedLines.push(write(scopes++, loop(iterator, loopLimit) + '{'));
+
+                    if (lastChar === ':') {
+                        indices.push(iterator);
+                        endlTerminators++;
+                    }
                     break;
                 }
+                //normal scanf
                 default: {
                     variables.push(symbol);
                     break;
                 }
             }
-            switch (lastChar) {
-                case ':': {
-                    if (indicies.length >= MAX_SCOPES)
-                        return "Too many inner loops.";
-
-                    const literal = letter[indicies.length];
-
-                    generatedLines.push(write(scopes++, loop(literal, loopLimit) + '{'));
-                    indicies.push(literal);
-                    break;
-                }
-                case '^': {
-                    generatedLines.push(write(scopes++, loop(loopLimit + loopLimit, loopLimit) + '{'));
-                    outsideScope++;
-                }
-            }
         }));
-        if (variables.length > 0) {
-            generatedLines.push(write(scopes, scanf(variables, indicies)));
-            variables = [];
-        }
-        while (scopes > outsideScope) {
+        printCurrentVariables();
+
+        while (endlTerminators > 0) {
             generatedLines.push(write(--scopes, "}"));
+            --endlTerminators;
         }
     });
-    generatedLines.push("");
     while (scopes > 0) {
         generatedLines.push(write(--scopes, "}"));
     }
-    return generatedLines.join("\n");
+    //const declaration = `int ${allVariables.join(", ")};`;
+    //return [declaration, '', ...generatedLines].join("\n");
+    return generatedLines.join('\n');
 }
 
 ////UI Functions 
@@ -98,21 +122,21 @@ function attemptToGenerate() {
 function copy() {
     /* Get the text field */
     var copyText = document.getElementById("output");
-  
+
     /* Select the text field */
     copyText.select();
     copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-  
+
     /* Copy the text inside the text field */
     document.execCommand("copy");
-  
+
     /* Alert the copied text */
 
     document.getElementById("copy").focus();
-    
-  }
 
-  $(document).ready(function(){
+}
+
+$(document).ready(function () {
     $('[data-toggle="popover"]').popover();
-  });
+});
 

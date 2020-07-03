@@ -13,13 +13,12 @@
     <div class="main-form row justify-content-md-center">
       <div class="input col-12 col-lg-4">
         <div>
-          <h3><span class="badge badge-primary d-block mt-3">Input</span></h3>
+          <h3><label for="input" class="badge badge-primary d-block mt-3">Input</label></h3>
         </div>
         <div>
           <textarea
             id="input"
             class="form-control"
-            type="text"
             placeholder="Enter formatted input here"
           ></textarea>
         </div>
@@ -28,17 +27,15 @@
       
       <div class="output col-12 col-lg-4">
         <div>
-          <h3><span class="badge badge-primary d-block mt-3">Output</span></h3>
+          <h3><label for="output" class="badge badge-primary d-block mt-3">Output</label></h3>
         </div>
         <textarea
           id="output"
           class="form-control"
-          type="text"
-          resize="no"
           placeholder="Code will be generated here"
           readonly
         ></textarea>
-        <button id="copy" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Copied !" onclick="copy()" class="btn btn-secondary d-block w-100 mt-1">Copy</button>
+        <button id="copy" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Copied!" onclick="copy()" class="btn btn-secondary d-block w-100 mt-1">Copy</button>
       </div>
     </div>
       
@@ -53,7 +50,8 @@
             <li>Scanning normal variables: <code>var</code></li>
             <li>Scanning variables in a loop: <code>n: a b</code></li>
             <li>Scanning in nested loops: <code>n: v m: u c</code></li>
-            <li>Multiple test-cases: <code>t^</code></li>
+            <li>Scanning in loops in ordinary variables: <code>m: u' v'</code></li>
+            <li>Multiple test-cases: <code>t{ n }</code></li>
         </ul>
         <div class="alert alert-danger text-center" role="alert">
             Note: Don't take this very seriously, this was done in like an hour or
